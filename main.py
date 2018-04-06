@@ -1,5 +1,8 @@
 import sys, io, math
 import numpy as np
+
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as pyplot
 import csv, re
 from scipy.stats import entropy
@@ -111,8 +114,8 @@ def distanceShow(dists,labels):
         pyplot.figure()
         box_sets = [[y for x,y in sorted(zip(labels,new_dists[i])) if x == k] for k in range(0,4)]
         # bins = np.linspace(-10, 10, 100)
-        for j in range(0,len(box_sets)):
-            pyplot.hist(box_sets[j],bins=100,label=sorted(label_headers)[j],alpha=0.5)
+        for j in range(len(box_sets)-1,-1,-1):
+            pyplot.hist(box_sets[j],bins=100,label=sorted(label_headers)[j],alpha=0.75)
             pyplot.xlabel('Distance')
             pyplot.ylabel('Probability')
             pyplot.grid(True)
