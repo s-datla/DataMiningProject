@@ -7,18 +7,19 @@ class LinearRegression:
         self.lr = lr
         self.steps = steps
 
-    def fit(self,input,labels,disp=False):
+    def fit(self,input,labels):
+        self.weights = []
         input = self.normalise(input)
         X = np.insert(input,0,1,axis=1)
-        Y = [y for y,_ in sorted(zip(labels,X))]
-        X = [x for _,x in sorted(zip(labels,X))]
-        weights = np.zeros(len(X[0]))
-        for i in range(0,self.steps):
-            y_hat = np.dot(X,weights)
-            error = Y - y_hat
-            print error
-            weights += self.lr * np.dot(error.T,X)
-        self.weights = weights
+        for label in np.unique(labels):
+            curr_weights = np.ones(len(X[0]))
+            modified_y = [1 if y == label else 0 for y in labels]
+            for i in range(0,self.steps):
+                y_hat = np.dot(X,curr_weights)
+                error = modified_y - y_hat
+                # print error
+                curr_weights += self.lr * np.dot(error.T,X)
+            self.weights += [curr_weights]
         return self
 
     # def permute(self,inputs,labels):
@@ -28,12 +29,25 @@ class LinearRegression:
     def cost(self,error,num_samples):
         return np.sum(error ** 2) / (2 * num_samples)
 
-    def predict(self,input):
-        return np.dot(np.insert(input,0,1,axis=1),self.weights)
+    # def predict(self,input):
+    #     return np.dot(np.insert(input,0,1,axis=1),self.weights)
 
     def clearWeights(self):
         self.weights = np.ones(9)
         return self
+
+    def predict(self,input):
+        input = self.normalise(input)
+        X = np.insert(input,0,1,axis=1)
+        print "Predicting {} classes".format(len(self.weights))
+        predicted = []
+        print len(X)
+        for i in range(0,len(X)):
+            predicted += [self.cost(X[i])]
+        return predicted
+
+    def cost(self,input):
+        return min([((i-np.dot(input,self.weights[i])) ** 2,i) for i in range(0,4)])[1]
 
     def normalise(self,input):
         maxs = np.max(input,axis=0)

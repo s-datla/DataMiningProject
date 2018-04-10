@@ -22,7 +22,7 @@ Label Distribution
 label_headers = ['unrelated','discuss','agree','disagree']
 
 def main():
-    bodies, stances, index, body_IDs, stance_IDs, labels = generateSentences()
+    bodies, stances, index, body_IDs, stance_IDs, labels = generateSentences('train_bodies.csv','train_stances.csv')
     encoder = LabelEncoder()
     encoder.fit(label_headers)
     encoded_labels = encoder.transform(labels)
@@ -36,15 +36,15 @@ def main():
 
     cv,tfidf = vectorise(training_bodies,training_stances,training_labels)
 
-    b_cv = cv.transform(training_bodies)
-    s_cv = cv.transform(training_stances)
-    b_tf = tfidf.transform(b_cv)
-    s_tf = tfidf.transform(s_cv)
-    cosineSim(training_bodies,training_stances,cv,training_labels,'plots/CS-vect.png')
-    cosineSim(b_tf,s_tf,tfidf,training_labels,'plots/CS-tfidf.png')
-
-    kldivergence(b_cv.toarray(),s_cv.toarray(),training_labels,'plots/KL-vect.png')
-    kldivergence(b_tf.toarray(),s_tf.toarray(),training_labels,'plots/KL-tfidf.png')
+    # b_cv = cv.transform(training_bodies)
+    # s_cv = cv.transform(training_stances)
+    # b_tf = tfidf.transform(b_cv)
+    # s_tf = tfidf.transform(s_cv)
+    # cosineSim(training_bodies,training_stances,cv,training_labels,'plots/CS-vect.png')
+    # cosineSim(b_tf,s_tf,tfidf,training_labels,'plots/CS-tfidf.png')
+    #
+    # kldivergence(b_cv.toarray(),s_cv.toarray(),training_labels,'plots/KL-vect.png')
+    # kldivergence(b_tf.toarray(),s_tf.toarray(),training_labels,'plots/KL-tfidf.png')
 
     # valid_bodies = sorted_bodies[index+1:len(sorted_bodies)]
     # valid_stances = stances[index+1:len(stances)]
@@ -56,18 +56,34 @@ def main():
 
     dists = calcDistances(valid_b_tf,valid_s_tf)
     distanceShow(dists[0:index+1],training_labels)
-    logistic = LogisticRegression(lr=0.0095,steps=10000)
-    logistic.fit(input=dists[0:index+1],labels=training_labels)
-    y_pred = logistic.predict(dists[index+1:len(dists)])
+    linear_dists = [dists[i][len(dists[i])-5:len(dists[i])] for i in range(0,len(dists))]
 
-    linear = LinearRegression(lr=0.095,steps=10000)
-    linear.fit(input=dists[0:index+1],labels=training_labels)
-    y_pred2 = linear.predict(dists[index+1:len(dists)])
+    test_b,test_s,test_index,test_b_ids,test_s_ids,test_labels = generateSentences('competition_test_bodies.csv','competition_test_stances.csv')
+    encoded_test = encoder.transform(test_labels)
+    test_sorted_b = linkBodies(test_b_ids,test_s_ids,test_b)
 
-    print len(y_pred2),list(y_pred2)
-    print(classification_report(y_true=list(valid_labels),y_pred=list(y_pred)))
-    # print(classification_report(y_true=list(valid_labels),y_pred=list(y_pred2)))
+    test_b_tf = list(tfidf.transform(cv.transform(test_sorted_b)).toarray())
+    test_s_tf = list(tfidf.transform(cv.transform(test_s)).toarray())
+    test_dists = calcDistances(test_b_tf,test_s_tf)
+    test_linear_dists = [test_dists[i][len(test_dists[i])-5:len(test_dists[i])] for i in range(0,len(test_dists))]
 
+    lrs = [0.0005,0.001,0.005,0.01,0.05,0.1]
+    for i in range(0,len(lrs)):
+        logistic = LogisticRegression(lr=lrs[i],steps=10000)
+        logistic.fit(input=dists[0:index+1],labels=training_labels)
+        y_pred = logistic.predict(test_dists)
+
+        linear = LinearRegression(lr=lrs[i],steps=50)
+        linear.fit(input=linear_dists[0:index+1],labels=training_labels)
+        y_pred2 = linear.predict(test_linear_dists)
+
+        print "Logistic Classification, LR: {}".format(lrs[i])
+        print(classification_report(y_true=list(encoded_test),y_pred=list(y_pred)))
+        print(matthews_corrcoef(encoded_test, y_pred))
+
+        print "Linear Classification, LR: {}".format(lrs[i])
+        print(classification_report(y_true=list(encoded_test),y_pred=list(y_pred2)))
+        print(matthews_corrcoef(encoded_test, y_pred2))
 
 
 def vectorise(bodies,stances,labels):
@@ -224,25 +240,25 @@ def countClass(data):
     distr = [i*100/sum(classes) for i in classes]
     return distr
 
-def generateSentences():
-    bodies = readBody()
-    stances = readStance()
+def generateSentences(body,stance):
+    bodies = readBody(body)
+    stances = readStance(stance)
     stance_sentences = [str(stances[k][0]) for k in range(len(stances))]
     body_sentences = [str(bodies[k][1]) for k in range(len(bodies))]
     index = splitSet(stances)
     print "Bodies Size: {}, Stances Size: {}, Split Index: {}".format(len(bodies),len(stances), index)
     return body_sentences, stance_sentences, index, [bodies[i][0] for i in range(0,len(bodies))], [stances[j][1] for j in range(0,len(stances))], [stances[k][2] for k in range(0,len(stances))]
 
-def readBody():
-    with open('train_bodies.csv','r') as body_file:
+def readBody(path):
+    with open(path,'r') as body_file:
         content = list(csv.reader(body_file, delimiter=',',quotechar='"'))
         content = content[1:len(content)]
         for i in range(0,len(content)):
             content[i][1] = re.sub(r'[^\w\s]',' ',content[i][1]).replace('\n','').lower()
     return content
 
-def readStance():
-    with open('train_stances.csv','r') as stance_file:
+def readStance(path):
+    with open(path,'r') as stance_file:
         content = list(csv.reader(stance_file, delimiter=',',quotechar='"'))
         content = content[1:len(content)]
         for i in range(0,len(content)):

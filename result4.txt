@@ -1,0 +1,163 @@
+Validation index is 44974
+Distribution for training set: [73.12224841019255, 17.81251389691822, 7.373148930493174, 1.692088762396051]
+Distribution for validation set: [73.20392235341205, 17.97078246948169, 7.244346607964779, 1.5809485691414848]
+Bodies Size: 1683, Stances Size: 49972, Split Index: 44974
+Shape of Count Matrix: (44975, 1000)
+Shape of TF-IDF Matrix: (44975, 1000)
+Average Distances: [(6.536507909457498, 'SumAbsDiff'), (7.782967374247636, 'SumSqrDiff'), (7.262492066308912, 'MeanSAD'), (6.5771805547521165, 'MeanSSD'), (10.69325228135337, 'Euclidean'), (9.027954501457598, 'Chebyschev'), (22.659620363543365, 'Minkowski'), (7.580329739397139, 'Canberra')]
+Predicting 4 classes
+4997
+Predicting 4 classes
+4997
+Logistic Classification, LR: 0.0005
+             precision    recall  f1-score   support
+
+          0       0.44      0.02      0.04       362
+          1       0.00      0.00      0.00        79
+          2       0.62      0.91      0.74       898
+          3       0.97      0.97      0.97      3658
+
+avg / total       0.85      0.87      0.85      4997
+
+0.710849360105
+Linear Classification, LR: 0.0005
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       362
+          1       0.00      0.00      0.00        79
+          2       0.00      0.00      0.00       898
+          3       0.73      1.00      0.85      3658
+
+avg / total       0.54      0.73      0.62      4997
+
+0.0
+Predicting 4 classes
+4997
+Predicting 4 classes
+4997
+Logistic Classification, LR: 0.001
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       362
+          1       0.00      0.00      0.00        79
+          2       0.61      0.93      0.73       898
+          3       0.97      0.96      0.97      3658
+
+avg / total       0.82      0.87      0.84      4997
+
+0.709247732047
+Linear Classification, LR: 0.001
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       362
+          1       0.00      0.00      0.00        79
+          2       0.00      0.00      0.00       898
+          3       0.73      1.00      0.85      3658
+
+avg / total       0.54      0.73      0.62      4997
+
+0.0
+Predicting 4 classes
+4997
+Predicting 4 classes
+4997
+Logistic Classification, LR: 0.005
+             precision    recall  f1-score   support
+
+          0       0.40      0.01      0.01       362
+          1       0.00      0.00      0.00        79
+          2       0.63      0.87      0.73       898
+          3       0.95      0.98      0.97      3658
+
+avg / total       0.84      0.87      0.84      4997
+
+0.696331574475
+Linear Classification, LR: 0.005
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       362
+          1       0.00      0.00      0.00        79
+          2       0.00      0.00      0.00       898
+          3       0.73      1.00      0.85      3658
+
+avg / total       0.54      0.73      0.62      4997
+
+0.0
+Predicting 4 classes
+4997
+Predicting 4 classes
+4997
+Logistic Classification, LR: 0.01
+             precision    recall  f1-score   support
+
+          0       0.33      0.01      0.01       362
+          1       0.00      0.00      0.00        79
+          2       0.27      0.98      0.42       898
+          3       0.99      0.47      0.63      3658
+
+avg / total       0.79      0.52      0.54      4997
+
+0.331949593822
+Linear Classification, LR: 0.01
+             precision    recall  f1-score   support
+
+          0       0.07      1.00      0.14       362
+          1       0.00      0.00      0.00        79
+          2       0.00      0.00      0.00       898
+          3       0.00      0.00      0.00      3658
+
+avg / total       0.01      0.07      0.01      4997
+
+0.0
+Predicting 4 classes
+4997
+Predicting 4 classes
+4997
+Logistic Classification, LR: 0.05
+             precision    recall  f1-score   support
+
+          0       0.27      0.72      0.39       362
+          1       0.00      0.00      0.00        79
+          2       0.70      0.08      0.15       898
+          3       0.92      0.98      0.95      3658
+
+avg / total       0.82      0.79      0.75      4997
+
+0.506867717321
+Linear Classification, LR: 0.05
+             precision    recall  f1-score   support
+
+          0       0.07      1.00      0.14       362
+          1       0.00      0.00      0.00        79
+          2       0.00      0.00      0.00       898
+          3       0.00      0.00      0.00      3658
+
+avg / total       0.01      0.07      0.01      4997
+
+0.0
+Predicting 4 classes
+4997
+Predicting 4 classes
+4997
+Logistic Classification, LR: 0.1
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       362
+          1       0.05      0.99      0.10        79
+          2       0.00      0.00      0.00       898
+          3       0.98      0.94      0.96      3658
+
+avg / total       0.72      0.71      0.71      4997
+
+0.441998220095
+Linear Classification, LR: 0.1
+             precision    recall  f1-score   support
+
+          0       0.07      1.00      0.14       362
+          1       0.00      0.00      0.00        79
+          2       0.00      0.00      0.00       898
+          3       0.00      0.00      0.00      3658
+
+avg / total       0.01      0.07      0.01      4997
+
+0.0
